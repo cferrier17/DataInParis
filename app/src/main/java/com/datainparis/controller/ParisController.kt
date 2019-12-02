@@ -6,13 +6,15 @@ import com.example.projet4a.ProjectConfig
 import com.example.projet4a.Util
 import com.fasterxml.jackson.databind.ObjectMapper
 import com.fasterxml.jackson.dataformat.yaml.YAMLFactory
+import com.google.android.gms.maps.model.LatLng
+import com.google.android.gms.maps.model.MarkerOptions
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
 
 import java.io.File
 
-class ParisController(private val mainActivity: MapsActivity) {
+class ParisController(private val mapsActivity: MapsActivity) {
     internal val BASE_URL = "https://opendata.paris.fr/api/records/1.0/"
     private var projectConfig: ProjectConfig? = null
 
@@ -33,7 +35,7 @@ class ParisController(private val mainActivity: MapsActivity) {
         val parisAPI = Util.getParisAPI()
 
 
-        val wifiSpots = parisAPI?.getWifiSpots()
+        val wifiSpots = parisAPI?.getWifiSpots(50)
 
         wifiSpots?.enqueue(object: Callback<WifiResponse> {
             override fun onFailure(call: Call<WifiResponse>, t: Throwable) {
@@ -43,6 +45,13 @@ class ParisController(private val mainActivity: MapsActivity) {
             override fun onResponse(call: Call<WifiResponse>, response: Response<WifiResponse>) {
                 val body = response.body()
                 println(body)
+
+                for (record in body?.records!!) {
+                    val lat = record.geometry?.coordinates?.get(0)
+                    val long = record.geometry?.coordinates?.get(1)
+                    val marker = LatLng(long!!, lat!!)
+                    mapsActivity.mMap.addMarker(MarkerOptions().position(marker).title("Marker in Sydney"))
+                }
             }
 
         })

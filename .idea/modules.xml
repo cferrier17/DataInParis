@@ -3,6 +3,9 @@
   <component name="ProjectModuleManager">
     <modules>
       <module fileurl="file://$PROJECT_DIR$/Data in paris.iml" filepath="$PROJECT_DIR$/Data in paris.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/DataInParis.iml" filepath="$PROJECT_DIR$/.idea/DataInParis.iml" />
+      <module fileurl="file://$PROJECT_DIR$/DataInParis-Data in paris.iml" filepath="$PROJECT_DIR$/DataInParis-Data in paris.iml" />
+      <module fileurl="file://$PROJECT_DIR$/app/DataInParis-app.iml" filepath="$PROJECT_DIR$/app/DataInParis-app.iml" />
       <module fileurl="file://$PROJECT_DIR$/app/app.iml" filepath="$PROJECT_DIR$/app/app.iml" />
     </modules>
   </component>
