@@ -53,18 +53,14 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback {
         val parisController =  ParisController(this)
 
         yourEditText = findViewById(R.id.editText) as EditText
-//        yourEditText.setText("10")
         yourEditText!!.addTextChangedListener(object : TextWatcher {
 
             override fun afterTextChanged(s: Editable) {
-
-                // you can call or do what you want with your EditText here
-
-                // yourEditText...
+//                parisController.callParisAPI()
             }
 
             override fun beforeTextChanged(s: CharSequence, start: Int, count: Int, after: Int) {
-                parisController.callParisAPI()
+//                parisController.callParisAPI()
             }
 
             override fun onTextChanged(s: CharSequence, start: Int, before: Int, count: Int) {
