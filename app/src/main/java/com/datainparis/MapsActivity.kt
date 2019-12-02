@@ -9,17 +9,19 @@ import com.google.android.gms.maps.GoogleMap
 import com.google.android.gms.maps.OnMapReadyCallback
 import com.google.android.gms.maps.SupportMapFragment
 import com.google.android.gms.maps.model.LatLng
-import com.google.android.gms.maps.model.MarkerOptions
-import androidx.core.app.ComponentActivity
-import androidx.core.app.ComponentActivity.ExtraData
-import androidx.core.content.ContextCompat.getSystemService
-import android.icu.lang.UCharacter.GraphemeClusterBreak.T
+import android.widget.EditText
+import android.text.Editable
+import android.text.TextWatcher
+
 
 
 
 class MapsActivity : AppCompatActivity(), OnMapReadyCallback {
 
     lateinit var mMap: GoogleMap
+    private lateinit var parisController: ParisController
+    private lateinit var yourEditText: EditText
+
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -28,8 +30,6 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback {
         val mapFragment = supportFragmentManager
             .findFragmentById(R.id.map) as SupportMapFragment
         mapFragment.getMapAsync(this)
-
-
     }
 
     /**
@@ -51,6 +51,32 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback {
         )
 
         val parisController =  ParisController(this)
-        parisController.callParisAPI()
+
+        yourEditText = findViewById(R.id.editText) as EditText
+//        yourEditText.setText("10")
+        yourEditText!!.addTextChangedListener(object : TextWatcher {
+
+            override fun afterTextChanged(s: Editable) {
+
+                // you can call or do what you want with your EditText here
+
+                // yourEditText...
+            }
+
+            override fun beforeTextChanged(s: CharSequence, start: Int, count: Int, after: Int) {
+                parisController.callParisAPI()
+            }
+
+            override fun onTextChanged(s: CharSequence, start: Int, before: Int, count: Int) {
+                parisController.callParisAPI()
+            }
+        })
+
+
+
+    }
+
+    fun getNbHotspots(): String{
+        return yourEditText.text.toString();
     }
 }
