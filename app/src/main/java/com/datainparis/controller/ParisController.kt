@@ -32,6 +32,9 @@ class ParisController(private val mapsActivity: MapsActivity) {
 
 
     fun callParisAPI() {
+        emptyMarkersList()
+
+
         val retrofit = Util.getRetrofit(BASE_URL);
         val parisAPI = Util.getParisAPI()
 
@@ -49,7 +52,7 @@ class ParisController(private val mapsActivity: MapsActivity) {
             }
 
             override fun onResponse(call: Call<WifiResponse>, response: Response<WifiResponse>) {
-                markers.removeAll(markers)
+
                 val body = response.body()
                 println(body)
 
@@ -59,9 +62,12 @@ class ParisController(private val mapsActivity: MapsActivity) {
                     val marker = LatLng(long!!, lat!!)
 
 //                    markers.add(marker);
-
+                    val title = MarkerOptions().position(marker).title("Marker in Sydney")
                     //todo : changer title
-                    mapsActivity.mMap.addMarker(MarkerOptions().position(marker).title("Marker in Sydney"))
+                    val addedMarker =
+                        mapsActivity.mMap.addMarker(MarkerOptions().position(marker).title("Marker in Sydney"))
+                    markers.add(addedMarker);
+
                 }
             }
 
@@ -80,6 +86,15 @@ class ParisController(private val mapsActivity: MapsActivity) {
             e.printStackTrace()
         }
         return null;
+    }
+
+    fun emptyMarkersList(){
+        if(markers.isNotEmpty()){
+            markers.forEach{
+                it.remove()
+            }
+            markers.clear()
+        }
     }
 
 }
