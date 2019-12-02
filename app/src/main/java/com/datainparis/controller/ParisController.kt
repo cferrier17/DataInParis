@@ -1,11 +1,15 @@
 package com.example.controller
 
+import android.annotation.SuppressLint
+import android.location.Location
 import com.datainparis.MapsActivity
 import com.example.model.ParisAPI.WifiResponse
 import com.example.projet4a.ProjectConfig
 import com.example.projet4a.Util
 import com.fasterxml.jackson.databind.ObjectMapper
 import com.fasterxml.jackson.dataformat.yaml.YAMLFactory
+import com.google.android.gms.location.FusedLocationProviderClient
+import com.google.android.gms.location.LocationServices
 import com.google.android.gms.maps.model.LatLng
 import com.google.android.gms.maps.model.Marker
 import com.google.android.gms.maps.model.MarkerOptions
@@ -21,8 +25,12 @@ class ParisController(private val mapsActivity: MapsActivity) {
     private var projectConfig: ProjectConfig? = null
     private val PREFS = "PREFS"
     private val markers = arrayListOf<Marker>()
+    private lateinit var fusedLocationClient: FusedLocationProviderClient
+    private lateinit var currentLocation: LatLng
+
 
     fun startWifi() {
+
         callParisAPI()
 
 
@@ -33,7 +41,9 @@ class ParisController(private val mapsActivity: MapsActivity) {
 
     fun callParisAPI() {
         emptyMarkersList()
+        fusedLocationClient = LocationServices.getFusedLocationProviderClient(mapsActivity)
 
+        updateCurrentLocalisation()
 
         val retrofit = Util.getRetrofit(BASE_URL);
         val parisAPI = Util.getParisAPI()
@@ -43,6 +53,8 @@ class ParisController(private val mapsActivity: MapsActivity) {
         if(nbHotspots=="") {
             nbHotspots="10"
         }
+
+
 
         val wifiSpots = parisAPI?.getWifiSpots(nbHotspots!!.toInt())
 
@@ -54,11 +66,10 @@ class ParisController(private val mapsActivity: MapsActivity) {
             override fun onResponse(call: Call<WifiResponse>, response: Response<WifiResponse>) {
 
                 val body = response.body()
-                println(body)
 
                 for (record in body?.records!!) {
                     val lat = record.geometry?.coordinates?.get(0)
-                    val long = record.geometry?.coordinates?.get(1)
+                     val long = record.geometry?.coordinates?.get(1)
                     val marker = LatLng(long!!, lat!!)
 
 //                    markers.add(marker);
@@ -66,7 +77,7 @@ class ParisController(private val mapsActivity: MapsActivity) {
                     //todo : changer title
                     val addedMarker =
                         mapsActivity.mMap.addMarker(MarkerOptions().position(marker).title("Marker in Sydney"))
-                    markers.add(addedMarker);
+                    markers.add(addedMarker)
 
                 }
             }
@@ -95,6 +106,20 @@ class ParisController(private val mapsActivity: MapsActivity) {
             }
             markers.clear()
         }
+    }
+
+    @SuppressLint("MissingPermission")
+    private fun updateCurrentLocalisation(){
+        lateinit var latLng: LatLng
+        fusedLocationClient.lastLocation
+            .addOnSuccessListener { location: Location? ->
+                var latitude =  location?.latitude
+                var longitude = location?.longitude
+
+                currentLocation = LatLng(longitude!!, latitude!!)
+            }
+
+
     }
 
 }
