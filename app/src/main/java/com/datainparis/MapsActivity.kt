@@ -1,5 +1,6 @@
 package com.datainparis
 
+import android.Manifest
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import com.example.controller.ParisController
@@ -12,8 +13,11 @@ import com.google.android.gms.maps.model.LatLng
 import android.widget.EditText
 import android.text.Editable
 import android.text.TextWatcher
-
-
+import android.Manifest.permission.ACCESS_COARSE_LOCATION
+import android.Manifest.permission.ACCESS_FINE_LOCATION
+import androidx.core.app.ActivityCompat
+import android.content.pm.PackageManager
+import androidx.core.content.ContextCompat
 
 
 class MapsActivity : AppCompatActivity(), OnMapReadyCallback {
@@ -21,6 +25,7 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback {
     lateinit var mMap: GoogleMap
     private lateinit var parisController: ParisController
     private lateinit var yourEditText: EditText
+    private val permissionsRequest = 100
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -30,6 +35,22 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback {
         val mapFragment = supportFragmentManager
             .findFragmentById(R.id.map) as SupportMapFragment
         mapFragment.getMapAsync(this)
+
+        if (ContextCompat.checkSelfPermission(this, ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED
+            && ContextCompat.checkSelfPermission( getApplicationContext(), ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+
+            if (ActivityCompat.shouldShowRequestPermissionRationale(this,
+                    ACCESS_FINE_LOCATION)) {
+
+            }else{
+                ActivityCompat.requestPermissions(this,
+                    Array(10){Manifest.permission.READ_CONTACTS},
+                    permissionsRequest);
+            }
+
+        }
+
+
     }
 
     /**
@@ -75,4 +96,6 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback {
     fun getNbHotspots(): String{
         return yourEditText.text.toString();
     }
+
+
 }
