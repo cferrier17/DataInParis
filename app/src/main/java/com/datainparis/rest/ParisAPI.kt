@@ -2,6 +2,7 @@ package com.example.rest
 
 import com.example.model.ParisAPI.WifiResponse
 import retrofit2.Call
+import retrofit2.http.FormUrlEncoded
 import retrofit2.http.GET
 import retrofit2.http.Path
 import retrofit2.http.Query
@@ -13,7 +14,9 @@ interface ParisAPI {
         @Query ("rows") nb: Int
     ) : Call<WifiResponse>
 
-
-
-
+    @GET("https://opendata.paris.fr/api/records/1.0/search/?dataset=paris-wi-fi-utilisation-des-hotspots-paris-wi-fi")
+    fun getWifiSpotsWithLocation(
+        @Query ("rows") nb: Int,
+        @Query("geofilter.distance") lng: Double, lat: Double, distance: Int
+    ) : Call<WifiResponse>
 }

@@ -1,7 +1,11 @@
 package com.example.controller
 
+import android.Manifest
 import android.annotation.SuppressLint
+import android.content.pm.PackageManager
 import android.location.Location
+import androidx.core.app.ActivityCompat
+import androidx.core.content.ContextCompat
 import com.datainparis.MapsActivity
 import com.example.model.ParisAPI.WifiResponse
 import com.example.projet4a.ProjectConfig
@@ -26,16 +30,7 @@ class ParisController(private val mapsActivity: MapsActivity) {
     private val PREFS = "PREFS"
     private val markers = arrayListOf<Marker>()
     private lateinit var fusedLocationClient: FusedLocationProviderClient
-    private lateinit var currentLocation: LatLng
-
-
-    fun startWifi() {
-
-        callParisAPI()
-
-
-
-    }
+    private var currentLocation: LatLng = LatLng(48.8534, 2.3488) //initalize at paris coordonates
 
 
 
@@ -56,7 +51,12 @@ class ParisController(private val mapsActivity: MapsActivity) {
 
 
 
-        val wifiSpots = parisAPI?.getWifiSpots(nbHotspots!!.toInt())
+        val wifiSpots =  parisAPI?.getWifiSpotsWithLocation(nbHotspots!!.toInt(),
+            10.0,
+            10.0,
+            1000)
+
+
 
         wifiSpots?.enqueue(object: Callback<WifiResponse> {
             override fun onFailure(call: Call<WifiResponse>, t: Throwable) {
@@ -121,5 +121,7 @@ class ParisController(private val mapsActivity: MapsActivity) {
 
 
     }
+
+
 
 }
