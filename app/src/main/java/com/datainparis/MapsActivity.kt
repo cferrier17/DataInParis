@@ -26,6 +26,8 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback {
     private lateinit var parisController: ParisController
     private lateinit var yourEditText: EditText
     private val permissionsRequest = 100
+    var  MY_PERMISSIONS_REQUEST_COARSE_LOCATION : Int = 0
+    var  MY_PERMISSIONS_REQUEST_FINE_LOCATION : Int = 0
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -36,20 +38,7 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback {
             .findFragmentById(R.id.map) as SupportMapFragment
         mapFragment.getMapAsync(this)
 
-        if (ContextCompat.checkSelfPermission(this, ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED
-            && ContextCompat.checkSelfPermission( getApplicationContext(), ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
-
-            if (ActivityCompat.shouldShowRequestPermissionRationale(this,
-                    ACCESS_FINE_LOCATION)) {
-
-            }else{
-                ActivityCompat.requestPermissions(this,
-                    Array(10){Manifest.permission.READ_CONTACTS},
-                    permissionsRequest);
-            }
-
-        }
-
+        requestPermissions()
 
     }
 
@@ -77,11 +66,9 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback {
         yourEditText!!.addTextChangedListener(object : TextWatcher {
 
             override fun afterTextChanged(s: Editable) {
-//                parisController.callParisAPI()
             }
 
             override fun beforeTextChanged(s: CharSequence, start: Int, count: Int, after: Int) {
-//                parisController.callParisAPI()
             }
 
             override fun onTextChanged(s: CharSequence, start: Int, before: Int, count: Int) {
@@ -97,5 +84,42 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback {
         return yourEditText.text.toString();
     }
 
+    private fun requestPermissions() {
+        // Here, mapsActivity is the current activity
+        if (ContextCompat.checkSelfPermission(this,
+                Manifest.permission.ACCESS_COARSE_LOCATION)
+            != PackageManager.PERMISSION_GRANTED
+            &&
+            ContextCompat.checkSelfPermission(this,
+                Manifest.permission.ACCESS_FINE_LOCATION)
+            != PackageManager.PERMISSION_GRANTED) {
 
+            // Permission is not granted
+            // Should we show an explanation?
+            if (ActivityCompat.shouldShowRequestPermissionRationale(this,
+                    Manifest.permission.ACCESS_COARSE_LOCATION)
+                &&
+                ActivityCompat.shouldShowRequestPermissionRationale(this,
+                    Manifest.permission.ACCESS_FINE_LOCATION)) {
+                // Show an explanation to the user *asynchronously* -- don't block
+                // this thread waiting for the user's response! After the user
+                // sees the explanation, try again to request the permission.
+            } else {
+                // No explanation needed, we can request the permission.
+                ActivityCompat.requestPermissions(this,
+                    arrayOf(Manifest.permission.ACCESS_COARSE_LOCATION),
+                    this.MY_PERMISSIONS_REQUEST_COARSE_LOCATION)
+
+                ActivityCompat.requestPermissions(this,
+                    arrayOf(Manifest.permission.ACCESS_FINE_LOCATION),
+                    this.MY_PERMISSIONS_REQUEST_FINE_LOCATION)
+
+                // MY_PERMISSIONS_REQUEST_READ_CONTACTS is an
+                // app-defined int constant. The callback method gets the
+                // result of the request.
+            }
+        } else {
+            // Permission has already been granted
+        }
+    }
 }
