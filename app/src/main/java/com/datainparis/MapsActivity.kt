@@ -3,7 +3,7 @@ package com.datainparis
 import android.Manifest
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import com.example.controller.ParisController
+import com.datainparis.controller.ParisController
 
 import com.google.android.gms.maps.CameraUpdateFactory
 import com.google.android.gms.maps.GoogleMap
@@ -13,14 +13,14 @@ import com.google.android.gms.maps.model.LatLng
 import android.widget.EditText
 import android.text.Editable
 import android.text.TextWatcher
-import android.Manifest.permission.ACCESS_COARSE_LOCATION
-import android.Manifest.permission.ACCESS_FINE_LOCATION
 import androidx.core.app.ActivityCompat
 import android.content.pm.PackageManager
+import android.net.Uri
 import androidx.core.content.ContextCompat
+import androidx.fragment.app.Fragment
 
 
-class MapsActivity : AppCompatActivity(), OnMapReadyCallback {
+class MapsActivity : AppCompatActivity(), OnMapReadyCallback,  optionsBarFragment.OnFragmentInteractionListener  {
 
     lateinit var mMap: GoogleMap
     private lateinit var parisController: ParisController
@@ -28,6 +28,7 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback {
     private val permissionsRequest = 100
     var  MY_PERMISSIONS_REQUEST_COARSE_LOCATION : Int = 0
     var  MY_PERMISSIONS_REQUEST_FINE_LOCATION : Int = 0
+    private lateinit var fragment: optionsBarFragment
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -37,6 +38,8 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback {
         val mapFragment = supportFragmentManager
             .findFragmentById(R.id.map) as SupportMapFragment
         mapFragment.getMapAsync(this)
+
+
 
         requestPermissions()
 
@@ -62,6 +65,9 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback {
 
         val parisController =  ParisController(this)
 
+
+        parisController.callParisAPI()
+
         yourEditText = findViewById(R.id.editText) as EditText
         yourEditText!!.addTextChangedListener(object : TextWatcher {
 
@@ -72,12 +78,11 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback {
             }
 
             override fun onTextChanged(s: CharSequence, start: Int, before: Int, count: Int) {
-                parisController.callParisAPI()
             }
         })
 
 
-
+        parisController.callParisAPI()
     }
 
     fun getNbHotspots(): String{
@@ -122,4 +127,18 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback {
             // Permission has already been granted
         }
     }
+
+    override fun onAttachFragment(fragment: Fragment) {
+        if (fragment is optionsBarFragment) {
+            fragment.setOptionBarSelectedListener(this)
+        }
+    }
+
+    override fun onFragmentInteraction(uri: Uri) {
+        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+    }
+
+
+
+
 }
