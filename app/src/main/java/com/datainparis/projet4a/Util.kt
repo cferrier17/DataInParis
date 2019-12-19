@@ -1,6 +1,6 @@
 package com.example.projet4a
 
-import com.example.rest.ParisAPI
+import com.datainparis.rest.ParisAPI
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
 

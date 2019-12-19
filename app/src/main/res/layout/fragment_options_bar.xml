@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".optionsBarFragment">
+
+    <!-- TODO: Update blank fragment layout -->
+
+    <TextView
+        android:id="@+id/textViewNbHotspots"
+        android:layout_width="230dp"
+        android:layout_height="48dp"
+        android:height="50px"
+        android:text="nombre de hotspots" />
+
+    <EditText
+        android:id="@+id/editText2"
+        android:layout_width="156dp"
+        android:layout_height="81dp"
+        android:layout_marginBottom="280dp"
+        android:height="50px"
+        android:autofillHints=""
+        android:ems="10"
+        android:inputType="number" />
+
+</LinearLayout>
