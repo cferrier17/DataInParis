@@ -1,27 +1,38 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".optionsBarFragment">
+    tools:context=".views.OptionsBarFragment">
 
     <!-- TODO: Update blank fragment layout -->
 
-    <TextView
-        android:id="@+id/textViewNbHotspots"
-        android:layout_width="230dp"
-        android:layout_height="48dp"
-        android:height="50px"
-        android:text="nombre de hotspots" />
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
 
-    <EditText
-        android:id="@+id/editText2"
-        android:layout_width="156dp"
-        android:layout_height="81dp"
-        android:layout_marginBottom="280dp"
-        android:height="50px"
-        android:autofillHints=""
-        android:ems="10"
-        android:inputType="number" />
+        <TextView
+            android:id="@+id/textViewNbHotspots"
+            android:layout_width="146dp"
+            android:layout_height="43dp"
+            android:height="50px"
+            android:background="@android:color/white"
+            android:text="nombre de hotspots :"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <EditText
+            android:id="@+id/editText2"
+            android:layout_width="74dp"
+            android:layout_height="43dp"
+            android:height="50px"
+            android:autofillHints=""
+            android:background="@android:color/white"
+            android:ems="10"
+            android:inputType="number"
+            app:layout_constraintStart_toEndOf="@+id/textViewNbHotspots"
+            app:layout_constraintTop_toTopOf="parent" />
+    </androidx.constraintlayout.widget.ConstraintLayout>
 
 </LinearLayout>

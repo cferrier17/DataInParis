@@ -1,6 +1,7 @@
-package com.datainparis
+package com.datainparis.views
 
 import android.Manifest
+import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import com.datainparis.controller.ParisController
@@ -16,19 +17,27 @@ import android.text.TextWatcher
 import androidx.core.app.ActivityCompat
 import android.content.pm.PackageManager
 import android.net.Uri
+import android.view.View
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
+import com.datainparis.R
 
 
-class MapsActivity : AppCompatActivity(), OnMapReadyCallback,  optionsBarFragment.OnFragmentInteractionListener  {
+class MapsActivity : AppCompatActivity(), OnMapReadyCallback,
+    OptionsBarFragment.OnOptionsBarFragmentInteractionListener,
+    BottomBarFragment.OnBottomFragmentInteractionListener{
+
 
     lateinit var mMap: GoogleMap
     private lateinit var parisController: ParisController
-    private lateinit var yourEditText: EditText
+    private lateinit var myEditText: EditText
+
+
     private val permissionsRequest = 100
     var  MY_PERMISSIONS_REQUEST_COARSE_LOCATION : Int = 0
     var  MY_PERMISSIONS_REQUEST_FINE_LOCATION : Int = 0
-    private lateinit var fragment: optionsBarFragment
+    private lateinit var optionsBarFragment: OptionsBarFragment
+    private lateinit var bottomBarFragment: BottomBarFragment
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -39,7 +48,8 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback,  optionsBarFragmen
             .findFragmentById(R.id.map) as SupportMapFragment
         mapFragment.getMapAsync(this)
 
-
+        optionsBarFragment = OptionsBarFragment()
+        bottomBarFragment = BottomBarFragment()
 
         requestPermissions()
 
@@ -66,12 +76,13 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback,  optionsBarFragmen
         val parisController =  ParisController(this)
 
 
-        parisController.callParisAPI()
 
-        yourEditText = findViewById(R.id.editText) as EditText
-        yourEditText!!.addTextChangedListener(object : TextWatcher {
+
+        myEditText = findViewById(R.id.editText2) as EditText
+        myEditText!!.addTextChangedListener(object : TextWatcher {
 
             override fun afterTextChanged(s: Editable) {
+                parisController.callParisAPI()
             }
 
             override fun beforeTextChanged(s: CharSequence, start: Int, count: Int, after: Int) {
@@ -82,11 +93,15 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback,  optionsBarFragmen
         })
 
 
+
+
+
         parisController.callParisAPI()
     }
 
     fun getNbHotspots(): String{
-        return yourEditText.text.toString();
+
+        return myEditText.text.toString();
     }
 
     private fun requestPermissions() {
@@ -129,14 +144,32 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback,  optionsBarFragmen
     }
 
     override fun onAttachFragment(fragment: Fragment) {
-        if (fragment is optionsBarFragment) {
+        if (fragment is OptionsBarFragment) {
             fragment.setOptionBarSelectedListener(this)
         }
+    }
+
+    override fun onOptionsBarFragmentInteraction(uri: Uri) {
+        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+
     }
 
     override fun onFragmentInteraction(uri: Uri) {
         TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
     }
+
+    fun launchActivity(view : View) {
+        val intent : Intent
+        val activityName = view.getTag()
+        when(activityName) {
+            "camera" -> intent = Intent(this, CameraActivity::class.java)
+            "map" -> intent = Intent(this, MapsActivity::class.java)
+            else -> intent = Intent(this, MapsActivity::class.java)
+        }
+
+        this?.startActivity(intent)
+    }
+
 
 
 
