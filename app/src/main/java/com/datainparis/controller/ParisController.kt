@@ -99,17 +99,7 @@ class ParisController(private val mapsActivity: MapsActivity) {
 
 
 
-    fun getConfig(): ProjectConfig? {
-        println("Working Directory = " +
-                System.getProperty("user.dir"));
-        val mapper = ObjectMapper(YAMLFactory())
-        try {
-            return mapper.readValue(File("app/src/main/java/com/example/config/application-config.yml"), ProjectConfig::class.java)
-        } catch (e: Exception) {
-            e.printStackTrace()
-        }
-        return null;
-    }
+
 
     fun emptyMarkersList(){
         if(markers.isNotEmpty()){

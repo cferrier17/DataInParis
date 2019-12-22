@@ -37,7 +37,7 @@
         android:layout_width="411dp"
         android:layout_height="691dp"
         map:layout_constraintEnd_toEndOf="parent"
-        map:layout_constraintHorizontal_bias="1.0"
+        map:layout_constraintHorizontal_bias="0.0"
         map:layout_constraintStart_toStartOf="parent"
         map:layout_constraintTop_toTopOf="parent"
         tools:context=".views.MapsActivity" />
@@ -53,16 +53,16 @@
     <fragment
         android:id="@+id/bottomBarFragment"
         android:name="com.datainparis.views.BottomBarFragment"
-        android:layout_width="409dp"
-        android:layout_height="41dp"
+        android:layout_width="411dp"
+        android:layout_height="46dp"
         android:layout_marginTop="2dp"
         android:layout_marginBottom="16dp"
         map:layout_constraintBottom_toBottomOf="parent"
         map:layout_constraintEnd_toEndOf="parent"
-        map:layout_constraintHorizontal_bias="1.0"
+        map:layout_constraintHorizontal_bias="0.0"
         map:layout_constraintStart_toStartOf="parent"
         map:layout_constraintTop_toBottomOf="@+id/map"
-        map:layout_constraintVertical_bias="0.0" />
+        map:layout_constraintVertical_bias="1.0" />
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>

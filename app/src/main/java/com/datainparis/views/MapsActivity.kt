@@ -51,7 +51,7 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback,
         optionsBarFragment = OptionsBarFragment()
         bottomBarFragment = BottomBarFragment()
 
-        requestPermissions()
+        requestLocationPermissions()
 
     }
 
@@ -104,7 +104,7 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback,
         return myEditText.text.toString();
     }
 
-    private fun requestPermissions() {
+    private fun requestLocationPermissions() {
         // Here, mapsActivity is the current activity
         if (ContextCompat.checkSelfPermission(this,
                 Manifest.permission.ACCESS_COARSE_LOCATION)
