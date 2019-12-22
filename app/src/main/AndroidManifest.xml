@@ -26,7 +26,7 @@
             android:value="AIzaSyAEmXRMPNhY9GjGhyAothzGIhgXVfHg454" />
 
         <activity
-            android:name=".views.MapsActivity"
+            android:name=".view.activities.MapsActivity"
             android:label="@string/title_activity_maps">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -35,7 +35,7 @@
             </intent-filter>
         </activity>
 
-        <activity android:name=".views.CameraActivity"
+        <activity android:name=".view.activities.CameraActivity"
             android:screenOrientation="landscape">
             <!-- configure this activity to use landscape orientation -->
 

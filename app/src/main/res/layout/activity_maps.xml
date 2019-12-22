@@ -40,11 +40,11 @@
         map:layout_constraintHorizontal_bias="0.0"
         map:layout_constraintStart_toStartOf="parent"
         map:layout_constraintTop_toTopOf="parent"
-        tools:context=".views.MapsActivity" />
+        tools:context=".view.activities.MapsActivity" />
 
     <fragment
         android:id="@+id/optionBarFragment"
-        android:name="com.datainparis.views.OptionsBarFragment"
+        android:name="com.datainparis.view.fragments.OptionsBarFragment"
         android:layout_width="283dp"
         android:layout_height="96dp"
         map:layout_constraintStart_toStartOf="parent"
@@ -52,7 +52,7 @@
 
     <fragment
         android:id="@+id/bottomBarFragment"
-        android:name="com.datainparis.views.BottomBarFragment"
+        android:name="com.datainparis.view.fragments.BottomBarFragment"
         android:layout_width="411dp"
         android:layout_height="46dp"
         android:layout_marginTop="2dp"

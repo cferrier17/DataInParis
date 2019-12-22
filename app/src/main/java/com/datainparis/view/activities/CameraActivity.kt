@@ -1,4 +1,4 @@
-package com.datainparis.views
+package com.datainparis.view.activities
 
 import android.Manifest
 import android.content.Context
@@ -17,6 +17,7 @@ import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import com.datainparis.R
 import com.datainparis.projet4a.CameraPreview
+import com.datainparis.view.fragments.BottomBarFragment
 import java.io.File
 import java.io.FileNotFoundException
 import java.io.FileOutputStream
@@ -33,24 +34,27 @@ class CameraActivity : AppCompatActivity(), BottomBarFragment.OnBottomFragmentIn
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_camera)
 
-        requestCameraPermissions()
+        if(checkCameraHardware(this)) {
+            requestCameraPermissions()
 
-        myCamera = getCameraInstance()
+            myCamera = getCameraInstance()
 
-        myPreview = myCamera?.let{
-            CameraPreview(this, it)
+            myPreview = myCamera?.let{
+                CameraPreview(this, it)
+            }
+
+            myPreview?.also {
+                val preview: FrameLayout = findViewById(R.id.camera_preview)
+                preview.addView(it)
+            }
+
+            val captureButton: Button = findViewById(R.id.button_capture)
+            captureButton.setOnClickListener {
+                myCamera?.takePicture(null, null, mPicture)
+            }
         }
 
-        myPreview?.also {
-            val preview: FrameLayout = findViewById(R.id.camera_preview)
-            preview.addView(it)
-        }
 
-        val captureButton: Button = findViewById(R.id.button_capture)
-        captureButton.setOnClickListener {
-            // get an image from the camera
-            myCamera?.takePicture(null, null, mPicture)
-        }
 
     }
 
@@ -67,44 +71,32 @@ class CameraActivity : AppCompatActivity(), BottomBarFragment.OnBottomFragmentIn
 
     fun getCameraInstance(): Camera? {
         return try {
-            Camera.open() // attempt to get a Camera instance
+            Camera.open()
         } catch (e: Exception) {
-            // Camera is not available (in use or does not exist)
-            null // returns null if camera is unavailable
+            null
         }
     }
 
     override fun onFragmentInteraction(uri: Uri) {
-        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+
     }
 
 
     private fun requestCameraPermissions() {
-        // Here, mapsActivity is the current activity
         if (ContextCompat.checkSelfPermission(this,
                 Manifest.permission.CAMERA)
             != PackageManager.PERMISSION_GRANTED) {
 
-            // Permission is not granted
-            // Should we show an explanation?
             if (ActivityCompat.shouldShowRequestPermissionRationale(this,
                     Manifest.permission.CAMERA)) {
-                // Show an explanation to the user *asynchronously* -- don't block
-                // this thread waiting for the user's response! After the user
-                // sees the explanation, try again to request the permission.
+
             } else {
-                // No explanation needed, we can request the permission.
                 ActivityCompat.requestPermissions(this,
                     arrayOf(Manifest.permission.CAMERA),
                     this.MY_PERMISSIONS_REQUEST_CAMERA)
-
-
-                // MY_PERMISSIONS_REQUEST_READ_CONTACTS is an
-                // app-defined int constant. The callback method gets the
-                // result of the request.
             }
         } else {
-            // Permission has already been granted
+
         }
     }
 
@@ -123,17 +115,12 @@ class CameraActivity : AppCompatActivity(), BottomBarFragment.OnBottomFragmentIn
     }
 
     private fun getOutputMediaFile(type: Int): File? {
-        // To be safe, you should check that the SDCard is mounted
-        // using Environment.getExternalStorageState() before doing this.
 
         val mediaStorageDir = File(
             Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES),
             "MyCameraApp"
         )
-        // This location works best if you want the created images to be shared
-        // between applications and persist after your app has been uninstalled.
 
-        // Create the storage directory if it does not exist
         mediaStorageDir.apply {
             if (!exists()) {
                 if (!mkdirs()) {
@@ -143,14 +130,10 @@ class CameraActivity : AppCompatActivity(), BottomBarFragment.OnBottomFragmentIn
             }
         }
 
-        // Create a media file name
         val timeStamp = SimpleDateFormat("yyyyMMdd_HHmmss").format(Date())
         return when (type) {
             MEDIA_TYPE_IMAGE -> {
                 File("${mediaStorageDir.path}${File.separator}IMG_$timeStamp.jpg")
-            }
-            MEDIA_TYPE_VIDEO -> {
-                File("${mediaStorageDir.path}${File.separator}VID_$timeStamp.mp4")
             }
             else -> null
         }
