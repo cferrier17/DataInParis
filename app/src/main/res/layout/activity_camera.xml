@@ -19,7 +19,7 @@
 
     <fragment
         android:id="@+id/fragment"
-        android:name="com.datainparis.views.BottomBarFragment"
+        android:name="com.datainparis.view.fragments.BottomBarFragment"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_weight="1" />

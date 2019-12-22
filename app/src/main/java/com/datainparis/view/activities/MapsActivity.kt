@@ -1,4 +1,4 @@
-package com.datainparis.views
+package com.datainparis.view.activities
 
 import android.Manifest
 import android.content.Intent
@@ -21,6 +21,8 @@ import android.view.View
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
 import com.datainparis.R
+import com.datainparis.view.fragments.BottomBarFragment
+import com.datainparis.view.fragments.OptionsBarFragment
 
 
 class MapsActivity : AppCompatActivity(), OnMapReadyCallback,
@@ -33,7 +35,6 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback,
     private lateinit var myEditText: EditText
 
 
-    private val permissionsRequest = 100
     var  MY_PERMISSIONS_REQUEST_COARSE_LOCATION : Int = 0
     var  MY_PERMISSIONS_REQUEST_FINE_LOCATION : Int = 0
     private lateinit var optionsBarFragment: OptionsBarFragment
@@ -43,7 +44,6 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback,
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_maps)
-        // Obtain the SupportMapFragment and get notified when the map is ready to be used.
         val mapFragment = supportFragmentManager
             .findFragmentById(R.id.map) as SupportMapFragment
         mapFragment.getMapAsync(this)
@@ -55,15 +55,6 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback,
 
     }
 
-    /**
-     * Manipulates the map once available.
-     * This callback is triggered when the map is ready to be used.
-     * This is where we can add markers or lines, add listeners or move the camera. In this case,
-     * we just add a marker near Sydney, Australia.
-     * If Google Play services is not installed on the device, the user will be prompted to install
-     * it inside the SupportMapFragment. This method will only be triggered once the user has
-     * installed Google Play services and returned to the app.
-     */
     override fun onMapReady(googleMap: GoogleMap) {
         mMap = googleMap
         val paris = LatLng(48.864716, 2.349014)
@@ -114,18 +105,13 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback,
                 Manifest.permission.ACCESS_FINE_LOCATION)
             != PackageManager.PERMISSION_GRANTED) {
 
-            // Permission is not granted
-            // Should we show an explanation?
             if (ActivityCompat.shouldShowRequestPermissionRationale(this,
                     Manifest.permission.ACCESS_COARSE_LOCATION)
                 &&
                 ActivityCompat.shouldShowRequestPermissionRationale(this,
                     Manifest.permission.ACCESS_FINE_LOCATION)) {
-                // Show an explanation to the user *asynchronously* -- don't block
-                // this thread waiting for the user's response! After the user
-                // sees the explanation, try again to request the permission.
+
             } else {
-                // No explanation needed, we can request the permission.
                 ActivityCompat.requestPermissions(this,
                     arrayOf(Manifest.permission.ACCESS_COARSE_LOCATION),
                     this.MY_PERMISSIONS_REQUEST_COARSE_LOCATION)
@@ -134,12 +120,9 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback,
                     arrayOf(Manifest.permission.ACCESS_FINE_LOCATION),
                     this.MY_PERMISSIONS_REQUEST_FINE_LOCATION)
 
-                // MY_PERMISSIONS_REQUEST_READ_CONTACTS is an
-                // app-defined int constant. The callback method gets the
-                // result of the request.
+
             }
         } else {
-            // Permission has already been granted
         }
     }
 
@@ -150,12 +133,10 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback,
     }
 
     override fun onOptionsBarFragmentInteraction(uri: Uri) {
-        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
 
     }
 
     override fun onFragmentInteraction(uri: Uri) {
-        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
     }
 
     fun launchActivity(view : View) {

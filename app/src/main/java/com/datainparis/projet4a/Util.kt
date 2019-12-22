@@ -12,6 +12,7 @@ class Util {
     companion object {
         private var retrofit: Retrofit? = null
         private var parisAPI: ParisAPI? = null
+        private var projectConfig: ProjectConfig? = null
 
         fun getRetrofit(baseURL: String): Retrofit? {
             if (retrofit == null) {
@@ -36,12 +37,20 @@ class Util {
             println("Working Directory = " +
                     System.getProperty("user.dir"));
             val mapper = ObjectMapper(YAMLFactory())
-            try {
-                return mapper.readValue(File("app/src/main/java/com/example/config/application-config.yml"), ProjectConfig::class.java)
-            } catch (e: Exception) {
-                e.printStackTrace()
+
+            if (projectConfig == null) {
+                try {
+                    return mapper.readValue(File("application-config.yml"), ProjectConfig::class.java)
+                } catch (e: Exception) {
+                    e.printStackTrace()
+                }
+                return null;
             }
-            return null;
+            else {
+                return projectConfig
+            }
+
+
         }
 
     }
