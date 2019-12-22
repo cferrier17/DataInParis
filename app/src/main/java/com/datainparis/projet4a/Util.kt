@@ -1,8 +1,11 @@
 package com.example.projet4a
 
 import com.datainparis.rest.ParisAPI
+import com.fasterxml.jackson.databind.ObjectMapper
+import com.fasterxml.jackson.dataformat.yaml.YAMLFactory
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
+import java.io.File
 
 class Util {
 
@@ -27,6 +30,18 @@ class Util {
                 parisAPI = retrofit?.create(ParisAPI::class.java!!)
 
             return parisAPI
+        }
+
+        fun getConfig(): ProjectConfig? {
+            println("Working Directory = " +
+                    System.getProperty("user.dir"));
+            val mapper = ObjectMapper(YAMLFactory())
+            try {
+                return mapper.readValue(File("app/src/main/java/com/example/config/application-config.yml"), ProjectConfig::class.java)
+            } catch (e: Exception) {
+                e.printStackTrace()
+            }
+            return null;
         }
 
     }

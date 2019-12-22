@@ -2,7 +2,7 @@ package com.datainparis.controller
 
 import android.annotation.SuppressLint
 import android.location.Location
-import com.datainparis.MapsActivity
+import com.datainparis.views.MapsActivity
 import com.example.model.ParisAPI.WifiResponse
 import com.example.projet4a.ProjectConfig
 import com.example.projet4a.Util
@@ -13,7 +13,6 @@ import com.google.android.gms.location.LocationServices
 import com.google.android.gms.maps.model.LatLng
 import com.google.android.gms.maps.model.Marker
 import com.google.android.gms.maps.model.MarkerOptions
-import okhttp3.HttpUrl
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
@@ -34,6 +33,7 @@ class ParisController(private val mapsActivity: MapsActivity) {
 
     fun callParisAPI() {
         emptyMarkersList()
+
         fusedLocationClient = LocationServices.getFusedLocationProviderClient(mapsActivity)
 
 //        updateCurrentLocalisation()
@@ -41,8 +41,8 @@ class ParisController(private val mapsActivity: MapsActivity) {
         val retrofit = Util.getRetrofit(BASE_URL);
         val parisAPI = Util.getParisAPI()
 
-//        var nbHotspots = mapsActivity.getNbHotspots()
-        var nbHotspots = "10"
+        var nbHotspots = mapsActivity.getNbHotspots()
+
 
         if(nbHotspots=="") {
             nbHotspots="10"
@@ -50,10 +50,7 @@ class ParisController(private val mapsActivity: MapsActivity) {
 
 
 
-//        val wifiSpots =  parisAPI?.getWifiSpotsWithLocation(nbHotspots!!.toInt(),
-//            currentLocation.longitude,
-//            currentLocation.latitude,
-//            1000)
+        val wifiSpots =  parisAPI?.getWifiSpots(nbHotspots!!.toInt())
 
 //        val wifiSpots = parisAPI?.getWifiSpots(nbHotspots.toInt())
 
@@ -62,8 +59,8 @@ class ParisController(private val mapsActivity: MapsActivity) {
 //                    +"&rows="+nbHotspots
 //                    +"&geofilter.distance="+currentLocation.latitude+"%2C"+currentLocation.longitude+"%2C"+20000)
 
-        val url = HttpUrl.parse("https://opendata.paris.fr/api/records/1.0/search/?dataset=paris-wi-fi-utilisation-des-hotspots-paris-wi-fi&rows=10&geofilter.polygon=(48.851190%2C+2.312021)%2C+(48.851190%2C+2.308418)%2C+(48.839894%2C+2.393294)")
-        val wifiSpots = parisAPI?.testOkHttp(url.toString())
+//        val url = HttpUrl.parse("https://opendata.paris.fr/api/records/1.0/search/?dataset=paris-wi-fi-utilisation-des-hotspots-paris-wi-fi&rows=10&geofilter.polygon=(48.851190%2C+2.312021)%2C+(48.851190%2C+2.308418)%2C+(48.839894%2C+2.393294)")
+//        val wifiSpots = parisAPI?.testOkHttp(url.toString())
 
 
         wifiSpots?.enqueue(object: Callback<WifiResponse> {
@@ -76,7 +73,6 @@ class ParisController(private val mapsActivity: MapsActivity) {
 
                 val body = response.body()
                 for ((i, record) in body?.records!!.withIndex()) {
-                    print("url : $url")
                     val long = record.geometry?.coordinates?.get(0)
                     val lat = record.geometry?.coordinates?.get(1)
                     val marker = LatLng(lat!!, long!!)
@@ -103,17 +99,7 @@ class ParisController(private val mapsActivity: MapsActivity) {
 
 
 
-    fun getConfig(): ProjectConfig? {
-        println("Working Directory = " +
-                System.getProperty("user.dir"));
-        val mapper = ObjectMapper(YAMLFactory())
-        try {
-            return mapper.readValue(File("app/src/main/java/com/example/config/application-config.yml"), ProjectConfig::class.java)
-        } catch (e: Exception) {
-            e.printStackTrace()
-        }
-        return null;
-    }
+
 
     fun emptyMarkersList(){
         if(markers.isNotEmpty()){
